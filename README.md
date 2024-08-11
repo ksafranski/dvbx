@@ -2,6 +2,12 @@
 
 A utility for improving developer experience by containerizing development environments.
 
+## Installation
+
+```bash
+npm install -g dvbx
+```
+
 ## Goal and Purpose
 
 While docker-compose is a wonderful tool, it has some drawbacks given it's aim is
