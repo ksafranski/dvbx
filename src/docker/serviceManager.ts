@@ -37,29 +37,31 @@ export const startServices = async (
 ): Promise<string[]> => {
   const { commands, links } = await buildDockerServiceCommands(config);
 
-  const loaders = {} as Record<string, any>;
+  const loader = log.loading(
+    `Starting services: ${commands.map((c) => c.name).join(', ')}`,
+  );
 
   const promises = commands.map(async (command): Promise<void> => {
-    loaders[command.name] = log.loading(`Starting service ${command.name}`);
     try {
       const svr = await execAsync(command.exec);
       if (svr.stderr) {
-        loaders[command.name].fail(
+        loader.fail(
           `Error starting service ${command.name}: ${commonErrorsTranslator(
             svr.stderr,
           )}`,
         );
         process.exit(1);
-      } else {
-        loaders[command.name].succeed(`Service ${command.name} started`);
       }
     } catch (error) {
-      loaders[command.name].fail(`Error starting service ${command.name}`);
+      loader.fail(`Error starting service ${command.name}`);
     }
   });
 
   try {
     await Promise.all(promises);
+    loader.succeed(
+      `Services started: ${commands.map((c) => c.name).join(', ')}`,
+    );
   } catch {
     await stopAndRemoveServices();
     process.exit(1);
