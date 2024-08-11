@@ -1,5 +1,5 @@
 name: example
-dockerfile: ./Dockerfile
+build: ./
 extends: ./env_extend.yml
 services:
   - mongo:
