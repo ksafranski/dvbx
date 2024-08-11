@@ -1,0 +1,42 @@
+{
+  "name": "dvbx",
+  "description": "Developer tool for Docker containerized local environments",
+  "version": "1.0.0",
+  "main": "dist/index.ts",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "maintainers": [
+    {
+      "name": "Kent Safranski",
+      "email": "ksafranski@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ksafranski/dvbx.git"
+  },
+  "homepage": "https://github.com/ksafranski/dvbx",
+  "scripts": {
+    "test": "node --import tsx --test ./tests/*.spec.ts",
+    "test:watch": "node --import tsx --test --watch ./tests/*.spec.ts",
+    "test:coverage": "node --import tsx --test --experimental-test-coverage --test-coverage-exclude=\"**/tests/**\" ./tests/*.spec.ts",
+    "build": "tsc -p . --outDir dist"
+  },
+  "dependencies": {
+    "chalk": "4",
+    "js-yaml": "^4.1.0",
+    "ora": "5.4.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "22",
+    "ts-node": "^10.4.0",
+    "tsx": "^4.16.3",
+    "typescript": "^4.4.4"
+  }
+}

@@ -1,0 +1,2 @@
+environment:
+  - ENV_EXTENDED=1

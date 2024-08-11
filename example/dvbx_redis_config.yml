@@ -1,0 +1,6 @@
+image: redis:6.0
+restart: always
+ports:
+  - 6379:6379
+environment:
+  - TEST_EXTEND=bar
