@@ -54,8 +54,15 @@ export const parseConfig = (filePath: string): PrimaryConfig => {
   const fileContent = readConfigFile(filePath);
   let config = yaml.load(fileContent) as PrimaryConfig;
 
+  if (!config) {
+    log.error(
+      'Error parsing configuration file, do you have a valid dvbx.yml?',
+    );
+    process.exit(1);
+  }
+
   // Check primary config for extend config
-  if (config.extends) {
+  if (config?.extends) {
     const extendsFileContent = readConfigFile(config.extends);
     const extendsConfig = yaml.load(extendsFileContent) as PrimaryConfig;
     delete config.extends;
@@ -63,7 +70,7 @@ export const parseConfig = (filePath: string): PrimaryConfig => {
   }
 
   // Check services for extend configs
-  if (config.services) {
+  if (config?.services) {
     config.services.forEach((service, idx) => {
       const serviceName = Object.keys(service)[0];
       const serviceConfig = service[serviceName];
@@ -81,7 +88,10 @@ export const parseConfig = (filePath: string): PrimaryConfig => {
     });
 
     // Merge shell command
-    config.tasks = { ...config.tasks, ...{ shell: config.shell || '/bin/sh' } };
+    config.tasks = {
+      ...config?.tasks,
+      ...{ shell: config.shell || '/bin/sh' },
+    };
   }
 
   return config;
