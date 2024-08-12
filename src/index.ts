@@ -1,4 +1,6 @@
+#!/usr/bin/env node
 import path from 'path';
+import fs from 'fs'; // Add this line
 import { parseConfig, PrimaryConfig } from './config/parser';
 import { validatePrimaryConfig } from './config/validator';
 import {
@@ -10,7 +12,15 @@ import { runTasks } from './tasks/taskRunner';
 import { parseArgs } from './utils/argParser';
 import { execAsync, spawnAsync } from './utils/childProcesses';
 import log from './utils/log';
-import pkg from '../package.json';
+import { get } from 'http';
+
+const getVersion = (): string => {
+  const pkg = fs.readFileSync(
+    path.resolve(__dirname, '../package.json'),
+    'utf8',
+  );
+  return JSON.parse(pkg).version;
+};
 
 const cleanup = async () => {
   try {
@@ -30,7 +40,7 @@ const main = async () => {
   const config = parseConfig(configPath);
 
   if (taskName === 'version' || taskName === '-v') {
-    console.log(`v${pkg.version}`);
+    console.log(getVersion());
     process.exit();
   }
 
@@ -80,7 +90,7 @@ const main = async () => {
 
   if (taskName === 'help' || taskName === '-h') {
     console.log(`
-DVBX [DeVBoX] v${pkg.version}
+DVBX [DeVBoX] v${getVersion()}\n
 \n-------------------------\n
 Usage: dvbx [command] [variables]
 \n-------------------------\n

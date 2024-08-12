@@ -1,8 +1,11 @@
 {
   "name": "dvbx",
   "description": "Developer tool for Docker containerized local environments",
-  "version": "1.0.2",
-  "main": "dist/index.ts",
+  "version": "1.0.8",
+  "main": "./dist/index.js",
+  "bin": {
+    "dvbx": "./dist/index.js"
+  },
   "engines": {
     "node": ">=14.0.0"
   },
