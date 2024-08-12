@@ -1,0 +1,8 @@
+tests/
+src/
+example/
+.prettierrc
+eslintrc.js
+.gitignore
+tsconfig.json
+yarn.lock
