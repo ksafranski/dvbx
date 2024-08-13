@@ -91,12 +91,13 @@ dvbx <task-name> --arg=val ...
 The following built-in commands are also available:
 
 ```bash
-version, -v                      Display the version of DVBX
-help, -h                         Display this help message
-shell [--name=service-name]      Open shell in container (defaults to primary)
-attach [--name=service-name]     Attach to container (defaults to primary)
-ps                               List all running DVBX containers
-stop                             Stop and remove all running DVBX containers
+version, -v               Display the version of DVBX
+help, -h                  Display this help message
+logs [service-name]       Display logs of container (defaults to primary)
+shell [service-name]      Open shell in container (defaults to primary)
+attach [service-name]     Attach to container (defaults to primary)
+ps                        List all running DVBX containers
+stop                      Stop and remove all running DVBX containers
 ```
 
 ---

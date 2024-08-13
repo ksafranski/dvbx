@@ -1,0 +1,21 @@
+name: project
+image: ubuntu:20.04
+# services:
+#   - foo:
+#       image: foo:1.0
+#       restart: on-failure:3
+#       environment:
+#         - FOO_VAR=bar
+#       ports:
+#         - 12345:12345
+#       hostname: foo
+# workdir: /project
+# privileged: true
+# environment:
+#   - HOST_USER=${USER}
+# ports:
+#   - 1111:1111
+# before: echo 'Before script'
+# after: echo 'After script'
+tasks:
+  env: env | sort

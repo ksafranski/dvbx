@@ -44,11 +44,21 @@ const main = async () => {
     process.exit();
   }
 
+  if (taskName === 'logs') {
+    const containerId = (
+      await execAsync(`docker ps -aqf "name=dvbx_${args[1] || config.name}"`)
+    ).stdout.trim();
+    if (containerId.length === 0) {
+      log.error('Container not running');
+      process.exit(0);
+    }
+    await spawnAsync(`docker logs -f ${containerId}`);
+    return;
+  }
+
   if (taskName === 'attach') {
     const containerId = (
-      await execAsync(
-        `docker ps -aqf "name=dvbx_${variables.name || config.name}"`,
-      )
+      await execAsync(`docker ps -aqf "name=dvbx_${args[1] || config.name}"`)
     ).stdout.trim();
     if (containerId.length === 0) {
       log.error('Container not running');
@@ -60,9 +70,7 @@ const main = async () => {
 
   if (taskName === 'shell') {
     const containerId = (
-      await execAsync(
-        `docker ps -aqf "name=dvbx_${variables.name || config.name}"`,
-      )
+      await execAsync(`docker ps -aqf "name=dvbx_${args[1] || config.name}"`)
     ).stdout.trim();
     if (containerId.length === 0) {
       // Not running, start the full dvbx run in shell
@@ -95,12 +103,13 @@ DVBX [DeVBoX] v${getVersion()}\n
 Usage: dvbx [command] [variables]
 \n-------------------------\n
 COMMANDS:\n
-  version, -v                      Display the version of DVBX
-  help, -h                         Display this help message
-  shell [--name=service-name]      Open shell in container (defaults to primary)
-  attach [--name=service-name]     Attach to container (defaults to primary)
-  ps                               List all running DVBX containers
-  stop                             Stop and remove all running DVBX containers
+  version, -v               Display the version of DVBX
+  help, -h                  Display this help message
+  logs [service-name]       Display logs of container (defaults to primary)
+  shell [service-name]      Open shell in container (defaults to primary)
+  attach [service-name]     Attach to container (defaults to primary)
+  ps                        List all running DVBX containers
+  stop                      Stop and remove all running DVBX containers
 \n--------------------------\n 
 AVAILABLE TASKS:\n
   ${Object.keys(config.tasks || {}).join('\n  ')}
