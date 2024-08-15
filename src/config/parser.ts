@@ -40,7 +40,7 @@ export const readConfigFile = (filePath: string): any => {
   try {
     return fs.readFileSync(filePath, 'utf8');
   } catch (error) {
-    log.error(`Error reading config file: ${error}`);
+    log.error(`Cannot find a dvbx.yml config file`);
     process.exit(1);
   }
 };

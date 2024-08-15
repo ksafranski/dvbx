@@ -127,10 +127,17 @@ const start = async (
   isShell = false,
 ) => {
   if (validatePrimaryConfig(config)) {
-    const links = await startServices(config);
-
-    const taskCommands = runTasks(config.tasks, taskName, variables);
-    await startPrimaryContainer(config, links, taskCommands);
+    try {
+      const links = await startServices(config);
+      const taskCommands = runTasks(config.tasks, taskName, variables);
+      await startPrimaryContainer(config, links, taskCommands);
+    } catch (error: any) {
+      log.error(`Error starting services`);
+      log.line();
+      console.log(error.message);
+      await cleanup();
+      process.exit(1);
+    }
 
     if (!isShell) {
       process.on('exit', cleanup);

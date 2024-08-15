@@ -76,7 +76,7 @@ export const buildPlatformFlag = (platform?: string): string => {
  * @returns string for network flag
  */
 export const buildNetworkFlag = (network?: string): string => {
-  return network ? `--network ${network}` : '';
+  return network ? `--network=${network}` : '';
 };
 
 /**

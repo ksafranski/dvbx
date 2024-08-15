@@ -38,7 +38,7 @@ export const startServices = async (
   const { commands, links } = await buildDockerServiceCommands(config);
 
   const loader = log.loading(
-    `Starting services: ${commands.map((c) => c.name).join(', ')}`,
+    `Starting services:\n  ${commands.map((c) => c.name).join(', ')}`,
   );
 
   const promises = commands.map(async (command): Promise<void> => {
@@ -60,7 +60,7 @@ export const startServices = async (
   try {
     await Promise.all(promises);
     loader.succeed(
-      `Services started: ${commands.map((c) => c.name).join(', ')}`,
+      `Services started:\n  ${commands.map((c) => c.name).join(', ')}`,
     );
   } catch {
     await stopAndRemoveServices();
@@ -114,51 +114,10 @@ export const startPrimaryContainer = async (
 export const stopAndRemoveServices = async (): Promise<void> => {
   const loader = log.loading('Cleaning up services');
   try {
-    let containerIdsToKill = '';
-    try {
-      containerIdsToKill = (
-        await execAsync('docker ps -q --filter "name=dvbx_"')
-      ).stdout;
-    } catch (error) {
-      loader.fail('Unable to find containers to stop');
-      process.exit(1);
-    }
-
-    if (containerIdsToKill) {
-      try {
-        await execAsync(
-          `docker kill ${containerIdsToKill.split('\n').join(' ')}`,
-        );
-      } catch (error) {
-        loader.fail('Unable to stop containers');
-        process.exit(1);
-      }
-
-      let containerIdsToRemove = '';
-
-      try {
-        containerIdsToRemove = (
-          await execAsync('docker ps -a -q --filter "name=dvbx_"')
-        ).stdout;
-      } catch (error) {
-        loader.fail('Unable to find containers to remove');
-        process.exit(1);
-      }
-
-      if (containerIdsToRemove) {
-        try {
-          await execAsync(
-            `docker rm -f ${containerIdsToRemove.split('\n').join(' ')}`,
-          );
-        } catch (error) {
-          loader.fail('Unable to remove containers');
-          process.exit(1);
-        }
-      }
-    }
-  } catch (error) {
-    loader.fail('Unable to stop and remove containers');
-    process.exit(1);
+    await execAsync('docker stop $(docker ps -a -q)');
+    await execAsync('docker rm $(docker ps -a -q)');
+  } catch (e) {
+    console.log('Error stopping and removing services', e);
   }
 
   loader.succeed('Services cleaned up');
