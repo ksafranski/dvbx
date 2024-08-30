@@ -1,7 +1,7 @@
 {
   "name": "dvbx",
   "description": "Developer tool for Docker containerized local environments",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "main": "./dist/index.js",
   "bin": {
     "dvbx": "./dist/index.js"

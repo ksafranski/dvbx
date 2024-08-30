@@ -53,7 +53,7 @@ export const startServices = async (
         process.exit(1);
       }
     } catch (error) {
-      loader.fail(`Error starting service ${command.name}`);
+      loader.fail(`Error starting service ${command.name}: ${error}`);
     }
   });
 
