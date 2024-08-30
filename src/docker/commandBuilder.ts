@@ -165,8 +165,10 @@ export const buildNetworks = async (networks?: string[]): Promise<void> => {
     (networks || []).map(async (network) => {
       try {
         return await execAsync(`docker network create ${network}`);
-      } catch (e) {
-        log.error(`Error creating network '${network}'`);
+      } catch (e: any) {
+        if (!e.stderr.includes('already exists')) {
+          log.error(`Error creating network '${network}': ${e}`);
+        }
       }
     }),
   );

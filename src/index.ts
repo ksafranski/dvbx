@@ -12,7 +12,7 @@ import { runTasks } from './tasks/taskRunner';
 import { parseArgs } from './utils/argParser';
 import { execAsync, spawnAsync } from './utils/childProcesses';
 import log from './utils/log';
-import { get } from 'http';
+import { buildNetworks } from './docker/commandBuilder';
 
 const getVersion = (): string => {
   const pkg = fs.readFileSync(
@@ -38,6 +38,10 @@ const main = async () => {
 
   const configPath = path.resolve(process.cwd(), 'dvbx.yml');
   const config = parseConfig(configPath);
+
+  if (config.networks) {
+    await buildNetworks(config.networks);
+  }
 
   if (taskName === 'version' || taskName === '-v') {
     console.log(getVersion());
