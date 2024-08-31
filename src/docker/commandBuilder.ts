@@ -212,6 +212,10 @@ export const buildDockerServiceCommands = async (
           image = await buildDockerfile(service.build, name);
         } else if (service.image) {
           image = service.image;
+          const exists = await imageExistsLocally(image);
+          if (!exists) {
+            log.warn(`${image} not found. Will pull on start.`);
+          }
         }
 
         const exec = `docker run -d ${argString} ${image}`;
