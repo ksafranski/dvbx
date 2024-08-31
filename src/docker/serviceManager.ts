@@ -98,7 +98,11 @@ export const startPrimaryContainer = async (
 
   const start = Date.now();
   const id = (await execAsync(command)).stdout.trim();
-  const code = await spawnAsync(`docker exec -it ${id} sh -c "${fullCommand}"`);
+  const code = await spawnAsync(
+    `docker exec ${
+      !process.env.DVBX_NO_TTY ? '-it ' : ' '
+    }${id} sh -c "${fullCommand}"`,
+  );
   try {
     log.line();
     log.info(`Execution time: ${formatDuration(Date.now() - start)}`);

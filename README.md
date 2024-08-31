@@ -107,6 +107,10 @@ stop                      Stop and remove all running DVBX containers
 The `dvbx.yml` configuration file is the primary configuration file for DVBX. It allows for
 defining the services, tasks, and environment for the development environment.
 
+#### `DVBX_NO_TTY` Environment Variable
+
+When running DVBX in a non-interactive environment, you can set the `DVBX_NO_TTY` environment variable to disable the TTY allocation for the container. This can be useful when running DVBX in a CI/CD environment.
+
 #### `name: string`
 
 Defines the name of the project. This is used for creating the container name.
