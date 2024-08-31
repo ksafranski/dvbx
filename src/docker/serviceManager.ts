@@ -5,9 +5,9 @@ import {
   buildPrimaryDockerCommand,
 } from '../docker/commandBuilder';
 import log, { formatDuration } from '../utils/log';
-import { load } from 'js-yaml';
 
 const commonErrorsTranslator = (error: string): string => {
+  console.log('Error:', error);
   if (error.includes('Conflict. The container name')) {
     return 'Container already exists';
   }
@@ -45,6 +45,9 @@ export const startServices = async (
     try {
       const svr = await execAsync(command.exec);
       if (svr.stderr) {
+        if (svr.stderr.startsWith('Unable to find image')) {
+          return; // Ignore this error: will pull on start
+        }
         loader.fail(
           `Error starting service ${command.name}: ${commonErrorsTranslator(
             svr.stderr,
