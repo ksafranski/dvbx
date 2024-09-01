@@ -118,7 +118,7 @@ const start = async (
 ) => {
   if (validatePrimaryConfig(config)) {
     try {
-      config.tasks.shell = config.tasks.shell || '/bin/sh';
+      config.tasks.shell = config.shell || '/bin/sh';
       const links = await startServices(config);
       const taskCommands = runTasks(config.tasks, taskName, variables);
       await startPrimaryContainer(config, links, taskCommands);
