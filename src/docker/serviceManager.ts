@@ -37,6 +37,10 @@ export const startServices = async (
 ): Promise<string[]> => {
   const { commands, links } = await buildDockerServiceCommands(config);
 
+  if (!commands.length) {
+    return [];
+  }
+
   const loader = log.loading(
     `Starting services:\n  ${commands.map((c) => c.name).join(', ')}`,
   );
@@ -124,7 +128,7 @@ export const stopAndRemoveServices = async (): Promise<void> => {
     await execAsync('docker stop $(docker ps -a -q)');
     await execAsync('docker rm $(docker ps -a -q)');
   } catch (e) {
-    console.log('Error stopping and removing services', e);
+    /* no-op */
   }
 
   loader.succeed('Services cleaned up');

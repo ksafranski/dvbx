@@ -41,14 +41,10 @@ const main = async () => {
 
   if (config.networks) {
     await buildNetworks(config.networks);
-  }
-
-  if (taskName === 'version' || taskName === '-v') {
+  } else if (taskName === 'version' || taskName === '-v') {
     console.log(getVersion());
     process.exit();
-  }
-
-  if (taskName === 'logs') {
+  } else if (taskName === 'logs') {
     const containerId = (
       await execAsync(`docker ps -aqf "name=dvbx_${args[1] || config.name}"`)
     ).stdout.trim();
@@ -58,9 +54,7 @@ const main = async () => {
     }
     await spawnAsync(`docker logs -f ${containerId}`);
     return;
-  }
-
-  if (taskName === 'attach') {
+  } else if (taskName === 'attach') {
     const containerId = (
       await execAsync(`docker ps -aqf "name=dvbx_${args[1] || config.name}"`)
     ).stdout.trim();
@@ -70,9 +64,7 @@ const main = async () => {
     }
     await spawnAsync(`docker attach ${containerId}`);
     return;
-  }
-
-  if (taskName === 'shell') {
+  } else if (taskName === 'shell') {
     const containerId = (
       await execAsync(`docker ps -aqf "name=dvbx_${args[1] || config.name}"`)
     ).stdout.trim();
@@ -87,20 +79,14 @@ const main = async () => {
       process.exit(code);
     }
     return;
-  }
-
-  if (taskName === 'ps') {
+  } else if (taskName === 'ps') {
     const containers = (await execAsync('docker ps -a --filter "name=dvbx_"'))
       .stdout;
     console.log(containers);
     process.exit(0);
-  }
-
-  if (taskName === 'stop') {
+  } else if (taskName === 'stop') {
     await cleanup();
-  }
-
-  if (taskName === 'help' || taskName === '-h') {
+  } else if (taskName === 'help' || taskName === '-h') {
     console.log(`
 DVBX [DeVBoX] v${getVersion()}\n
 \n-------------------------\n
@@ -119,9 +105,9 @@ AVAILABLE TASKS:\n
   ${Object.keys(config.tasks || {}).join('\n  ')}
 `);
     process.exit(0);
+  } else {
+    start(config, taskName, variables);
   }
-
-  start(config, taskName, variables);
 };
 
 const start = async (
@@ -132,6 +118,7 @@ const start = async (
 ) => {
   if (validatePrimaryConfig(config)) {
     try {
+      config.tasks.shell = config.tasks.shell || '/bin/sh';
       const links = await startServices(config);
       const taskCommands = runTasks(config.tasks, taskName, variables);
       await startPrimaryContainer(config, links, taskCommands);

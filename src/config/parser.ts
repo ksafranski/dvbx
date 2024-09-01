@@ -88,10 +88,7 @@ export const parseConfig = (filePath: string): PrimaryConfig => {
     });
 
     // Merge shell command
-    config.tasks = {
-      ...config?.tasks,
-      ...{ shell: config.shell || '/bin/sh' },
-    };
+    config.tasks.shell = config.tasks.shell || '/bin/sh';
   }
 
   return config;
