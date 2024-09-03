@@ -41,7 +41,10 @@ const main = async () => {
 
   if (config.networks) {
     await buildNetworks(config.networks);
-  } else if (taskName === 'version' || taskName === '-v') {
+  }
+
+  if (taskName === 'version' || taskName === '-v') {
+    console.log('DVBX [DeVBoX] v' + getVersion());
     console.log(getVersion());
     process.exit();
   } else if (taskName === 'logs') {
