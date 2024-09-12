@@ -78,11 +78,9 @@ export const buildDockerfile = async (
   // Check if the image needs to be rebuilt
   if (await shouldRebuildImage(dockerfile_path, imageName)) {
     const loader = log.loading(`Building image ${imageName}`);
+    const escapedPath = `"${path.resolve(process.cwd(), dockerfile_path)}"`;
     await execAsync(
-      `docker build -t ${imageName} -f ${path.resolve(
-        process.cwd(),
-        dockerfile_path,
-      )}/Dockerfile .`,
+      `docker build -t ${imageName} -f ${escapedPath}/Dockerfile .`,
       {
         cwd: dockerfile_path,
       },
