@@ -77,7 +77,9 @@ const main = async () => {
     } else {
       // Already running, exec into the container
       const code = await spawnAsync(
-        `docker exec -it ${containerId} sh -c "${config.shell || '/bin/sh'}"`,
+        `docker exec -it ${containerId} -u ${config.user || 'root'} sh -c "${
+          config.shell || '/bin/sh'
+        }"`,
       );
       process.exit(code);
     }
@@ -103,7 +105,7 @@ COMMANDS:\n
   attach [service-name]     Attach to container (defaults to primary)
   ps                        List all running DVBX containers
   stop                      Stop and remove all running DVBX containers
-\n--------------------------\n 
+\n--------------------------\n
 AVAILABLE TASKS:\n
   ${Object.keys(config.tasks || {}).join('\n  ')}
 `);
